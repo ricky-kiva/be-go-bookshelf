@@ -4,6 +4,7 @@ import (
 	"be-go-bookshelf/app"
 	"be-go-bookshelf/auth"
 	"be-go-bookshelf/db"
+	"be-go-bookshelf/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +20,7 @@ func main() {
 	r.GET("/", auth.HomeHandler)
 	r.GET("/login", auth.LoginGetHandler)
 
-	r.GET("/books", handler.GetBooks)
+	r.GET("/books", middleware.AuthValidator, handler.GetBooks)
 
 	r.POST("/login", auth.LoginPostHandler)
 
