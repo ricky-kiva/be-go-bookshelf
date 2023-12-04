@@ -11,6 +11,7 @@ import (
 
 func AuthValidator(c *gin.Context) {
 	tokenString := c.Query("auth")
+
 	if tokenString == "" {
 		tokenString = c.PostForm("auth")
 		if tokenString == "" {
@@ -19,22 +20,22 @@ func AuthValidator(c *gin.Context) {
 			})
 			c.Abort()
 		}
+	}
 
-		token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-			if _, valid := t.Method.(*jwt.SigningMethodHMAC); !valid {
-				return nil, fmt.Errorf("Invalid token: %s", t.Header["alg"])
-			}
-			return []byte(os.Getenv("SUPER_SECRET")), nil
-		})
-
-		if token != nil && err == nil {
-			fmt.Println("Token verified")
-			c.Next()
-		} else {
-			c.HTML(http.StatusUnauthorized, "login.html", gin.H{
-				"content": "Token is expired",
-			})
-			c.Abort()
+	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
+		if _, valid := t.Method.(*jwt.SigningMethodHMAC); !valid {
+			return nil, fmt.Errorf("invalid token: %s", t.Header["alg"])
 		}
+		return []byte(os.Getenv("SUPER_SECRET")), nil
+	})
+
+	if token != nil && err == nil {
+		fmt.Println("Token verified")
+		c.Next()
+	} else {
+		c.HTML(http.StatusUnauthorized, "login.html", gin.H{
+			"content": err.Error(),
+		})
+		c.Abort()
 	}
 }
