@@ -1,0 +1,41 @@
+{{ template "header.html" . }}
+
+<h1>{{.payload.Title}}</h1>
+
+<p>Author: {{.payload.Author}} | stock: {{.payload.Stock}}</p>
+<p>{{.payload.Description}}</p>
+
+<label>
+    <form
+        action="/updateBook/{{.payload.Id}}"
+        method="get">
+        <input
+            type="hidden"
+            name="auth"
+            value="{{.auth}}" />
+        <button 
+            type="update"
+            class="btn btn-primary">
+            Update
+        </button>
+    </form>
+</label>
+
+<label>
+    <form
+        action="/deleteBook/{{.payload.Id}}"
+        method="post">
+        <!-- DELETE is not supported in HTML -->
+        <input 
+            type="hidden"
+            name="auth"
+            value="{{.auth}}" />
+        <button
+            type="delete"
+            class="btn btn-primary">
+            Delete
+        </button>
+    </form>
+</label>
+
+{{ template "footer.html" . }}

@@ -21,6 +21,17 @@ func main() {
 	r.GET("/login", auth.LoginGetHandler)
 
 	r.GET("/books", middleware.AuthValidator, handler.GetBooks)
+	r.GET("/book/:id", middleware.AuthValidator, handler.GetBookById)
+
+	r.GET("/addBook", middleware.AuthValidator, handler.GetAddBook)
+	r.POST("/book", middleware.AuthValidator, handler.PostBook)
+
+	r.GET("/updateBook/:id", middleware.AuthValidator, handler.GetUpdateBook)
+	// the template engine HTML approach doesn't support PUT
+	r.POST("/updateBook/:id", middleware.AuthValidator, handler.PutBook)
+
+	// the template engine HTML approach doesn't support DELETE
+	r.POST("/deleteBook/:id", middleware.AuthValidator, handler.DeleteBook)
 
 	r.POST("/login", auth.LoginPostHandler)
 
